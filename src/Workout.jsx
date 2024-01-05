@@ -1,11 +1,22 @@
+import { useState, useRef } from "react";
 export default function Workout({ title, description, time, onComplete }) {
+  const timer = useRef();
+  const [workoutStarted, editWorkoutStarted] = useState(false);
+
   function handleStartWorkout() {
-    // Todo: Start timer
+    timer.current = setTimeout(() => {
+      onComplete();
+      editWorkoutStarted(false);
+    }, time / 100);
+    editWorkoutStarted(true);
   }
 
   function handleStopWorkout() {
-    // Todo: Stop timer
-    onComplete();
+    clearTimeout(timer.current);
+    {
+      workoutStarted ? onComplete() : undefined;
+    }
+    editWorkoutStarted(false);
   }
 
   return (
